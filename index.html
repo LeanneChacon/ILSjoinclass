@@ -483,9 +483,9 @@ const translations = {
     title: "How to Join Your Class",
     subtitle: "A quick guide for Intercambio students",
     introTitle: "Join Your Class the Right Way!",
-    introText: "Always log into <a href="https://ils.intercambio.org/" target="_blank" rel="noopener noreferrer">the Intercambio Learning System</a> (ILS) first, then join your class from the platform. This helps make sure your attendance is recorded automatically.",
+    introText: "Always log into the Intercambio Learning System (ILS) first, then join your class from the platform. This helps make sure your attendance is recorded automatically.",
     step1Title: "Log in to the ILS",
-    step1Text: "Go to <a href="https://ils.intercambio.org/" target="_blank" rel="noopener noreferrer">the Intercambio Learning System</a> and enter your username and password.",
+    step1Text: "Go to the Intercambio Learning System and enter your username and password.",
     step2Title: "Go to your Dashboard",
     step2Text: "After logging in, you will see your upcoming class information.",
     step3Title: "Click “Join Class”",
@@ -699,24 +699,30 @@ const translations = {
 
 function setLanguage(lang) {
   const t = translations[lang] || translations.en;
+
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.dataset.i18n;
-    if (t[key] !== undefined) el.textContent = t[key];
+    if (t[key] !== undefined) {
+      if (key === "introText" && lang === "en") {
+        el.innerHTML = 'Always log into <a href="https://ils.intercambio.org/" target="_blank" rel="noopener noreferrer">the Intercambio Learning System</a> (ILS) first, then join your class from the platform. This helps make sure your attendance is recorded automatically.';
+      } else if (key === "step1Text" && lang === "en") {
+        el.innerHTML = 'Go to <a href="https://ils.intercambio.org/" target="_blank" rel="noopener noreferrer">the Intercambio Learning System</a> and enter your username and password.';
+      } else {
+        el.textContent = t[key];
+      }
+    }
   });
+
   document.documentElement.lang = lang;
   localStorage.setItem("intercambioLanguage", lang);
 
-  // Keep the ILS link active in English. Other languages use the translated
-  // text without changing the link destination.
-  const intro = document.querySelector('[data-i18n="introText"]');
-  const step1 = document.querySelector('[data-i18n="step1Text"]');
-  if (lang === "en") {
-    if (intro) intro.innerHTML = 'Always log into <a href="https://ils.intercambio.org/" target="_blank" rel="noopener noreferrer">the Intercambio Learning System</a> (ILS) first, then join your class from the platform. This helps make sure your attendance is recorded automatically.';
-    if (step1) step1.innerHTML = 'Go to <a href="https://ils.intercambio.org/" target="_blank" rel="noopener noreferrer">the Intercambio Learning System</a> and enter your username and password.';
-  }
+  const select = document.getElementById("languageSelect");
+  if (select) select.value = lang;
 }
 
-document.getElementById("languageSelect").addEventListener("change", e => setLanguage(e.target.value));
+document.getElementById("languageSelect").addEventListener("change", function () {
+  setLanguage(this.value);
+});
 
 const savedLanguage = localStorage.getItem("intercambioLanguage") || "en";
 document.getElementById("languageSelect").value = savedLanguage;
