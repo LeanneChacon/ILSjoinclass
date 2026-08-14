@@ -298,6 +298,33 @@
       text-decoration-thickness: 2px;
     }
 
+
+    .step-visual {
+      display: block;
+      width: min(100%, 210px);
+      height: 135px;
+      object-fit: contain;
+      margin: 16px auto 14px;
+      border-radius: 10px;
+      background: #f3f9ef;
+      border: 1px solid #d9e6d3;
+    }
+
+    @media (max-width: 900px) {
+      .step-visual {
+        width: min(100%, 240px);
+        height: 145px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .step-visual {
+        width: min(100%, 300px);
+        height: auto;
+        max-height: 190px;
+      }
+    }
+
     /* Tablets */
     @media (max-width: 900px) {
       .steps {
@@ -430,21 +457,25 @@
       <article class="step">
         <div class="number">1</div>
         <h3 data-i18n="step1Title">Log in to the ILS</h3>
+        <img class="step-visual" src="step1_join_class_visual.jpg" alt="Intercambio ILS login screen">
         <p data-i18n="step1Text">Go to <a href="https://ils.intercambio.org/" target="_blank" rel="noopener noreferrer">the Intercambio Learning System</a> and enter your username and password.</p>
       </article>
       <article class="step">
         <div class="number">2</div>
         <h3 data-i18n="step2Title">Go to your Dashboard</h3>
+        <img class="step-visual" src="step2_join_class_visual.jpg" alt="Intercambio student dashboard showing upcoming class">
         <p data-i18n="step2Text">After logging in, you will see your upcoming class information.</p>
       </article>
       <article class="step">
         <div class="number">3</div>
         <h3 data-i18n="step3Title">Click “Join Class”</h3>
+        <img class="step-visual" src="step3_join_class_visual.jpg" alt="Intercambio Join Class option highlighted">
         <p data-i18n="step3Text">Find your upcoming class and select the Join Class button.</p>
       </article>
       <article class="step">
         <div class="number">4</div>
         <h3 data-i18n="step4Title">Join and learn!</h3>
+        <img class="step-visual" src="step4_join_class_visual.jpg" alt="Student joining an Intercambio class online">
         <p data-i18n="step4Text">You’re in! Your class will open through the platform.</p>
       </article>
     </section>
@@ -483,9 +514,9 @@ const translations = {
     title: "How to Join Your Class",
     subtitle: "A quick guide for Intercambio students",
     introTitle: "Join Your Class the Right Way!",
-    introText: "Always log into the Intercambio Learning System (ILS) first, then join your class from the platform. This helps make sure your attendance is recorded automatically.",
+    introText: "Always log into <a href="https://ils.intercambio.org/" target="_blank" rel="noopener noreferrer">the Intercambio Learning System</a> (ILS) first, then join your class from the platform. This helps make sure your attendance is recorded automatically.",
     step1Title: "Log in to the ILS",
-    step1Text: "Go to the Intercambio Learning System and enter your username and password.",
+    step1Text: "Go to <a href="https://ils.intercambio.org/" target="_blank" rel="noopener noreferrer">the Intercambio Learning System</a> and enter your username and password.",
     step2Title: "Go to your Dashboard",
     step2Text: "After logging in, you will see your upcoming class information.",
     step3Title: "Click “Join Class”",
@@ -699,30 +730,24 @@ const translations = {
 
 function setLanguage(lang) {
   const t = translations[lang] || translations.en;
-
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.dataset.i18n;
-    if (t[key] !== undefined) {
-      if (key === "introText" && lang === "en") {
-        el.innerHTML = 'Always log into <a href="https://ils.intercambio.org/" target="_blank" rel="noopener noreferrer">the Intercambio Learning System</a> (ILS) first, then join your class from the platform. This helps make sure your attendance is recorded automatically.';
-      } else if (key === "step1Text" && lang === "en") {
-        el.innerHTML = 'Go to <a href="https://ils.intercambio.org/" target="_blank" rel="noopener noreferrer">the Intercambio Learning System</a> and enter your username and password.';
-      } else {
-        el.textContent = t[key];
-      }
-    }
+    if (t[key] !== undefined) el.textContent = t[key];
   });
-
   document.documentElement.lang = lang;
   localStorage.setItem("intercambioLanguage", lang);
 
-  const select = document.getElementById("languageSelect");
-  if (select) select.value = lang;
+  // Keep the ILS link active in English. Other languages use the translated
+  // text without changing the link destination.
+  const intro = document.querySelector('[data-i18n="introText"]');
+  const step1 = document.querySelector('[data-i18n="step1Text"]');
+  if (lang === "en") {
+    if (intro) intro.innerHTML = 'Always log into <a href="https://ils.intercambio.org/" target="_blank" rel="noopener noreferrer">the Intercambio Learning System</a> (ILS) first, then join your class from the platform. This helps make sure your attendance is recorded automatically.';
+    if (step1) step1.innerHTML = 'Go to <a href="https://ils.intercambio.org/" target="_blank" rel="noopener noreferrer">the Intercambio Learning System</a> and enter your username and password.';
+  }
 }
 
-document.getElementById("languageSelect").addEventListener("change", function () {
-  setLanguage(this.value);
-});
+document.getElementById("languageSelect").addEventListener("change", e => setLanguage(e.target.value));
 
 const savedLanguage = localStorage.getItem("intercambioLanguage") || "en";
 document.getElementById("languageSelect").value = savedLanguage;

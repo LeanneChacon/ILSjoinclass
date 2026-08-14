@@ -1,17 +1,13 @@
-# Intercambio ILS Join Class Page
+# Intercambio ILS Join Class
 
-This version fixes the JavaScript translation error.
+This version adds responsive images to each of the four introductory steps.
 
-Upload/replace these two files in the root of the `main` branch:
-- `index.html`
-- `intercambio_join_class_student_graphic.jpg`
+Upload/replace all files in the root of the GitHub Pages `main` branch:
+- index.html
+- intercambio_join_class_student_graphic.jpg
+- step1_join_class_visual.jpg
+- step2_join_class_visual.jpg
+- step3_join_class_visual.jpg
+- step4_join_class_visual.jpg
 
-GitHub Pages should then serve the page at:
-https://leannechacon.github.io/ILSjoinclass/
-
-Languages:
-English, Spanish, Portuguese, Chinese, Korean, French, Russian, Ukrainian.
-
-If the old version is cached, hard refresh:
-Mac: Cmd + Shift + R
-Windows: Ctrl + Shift + R
+The step images are responsive and stack cleanly on smaller screens.
